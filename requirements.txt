@@ -1,0 +1,6 @@
+fastmcp
+requests
+fastapi
+uvicorn
+tabulate
+bs4

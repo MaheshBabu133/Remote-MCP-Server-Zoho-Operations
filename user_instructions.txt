@@ -1,0 +1,29 @@
+# ZOHO MAIL OPERATIONS - TOOL DEPENDENCIES
+
+1. Authentication Flow: Refresh_Token_Parameter_Admin_Guide → Refresh_Token_Generator → Access_Token_Generator
+   - First call Refresh_Token_Parameter_Admin_Guide to get instructions for setup
+   - Then call Refresh_Token_Generator with CLIENT_ID, CLIENT_SECRET, and authorization_code to generate and store the refresh token
+   - Finally, call Access_Token_Generator which uses the stored refresh token to generate a temporary access token
+   - This access token is REQUIRED for all user management operations
+
+2. User Management Flow:
+   - Access_Token_Generator → Get_All_User_Info → User Operations
+   - Always first call Access_Token_Generator to get a valid token
+   - Then call Get_All_User_Info to retrieve zoid, user information, and account details
+   - For creating users: Use Create_Zoho_Mail_User with access token, firstName, zoid, domain (password optional)
+   - For updating IMAP: Use Update_IMAP_Status with access token, zoid, account_id, zuid, enable_imap
+   - For deleting users: Use Delete_User_By_ZUID with access token, zoid, zuid
+   - For resetting passwords: Use Reset_Zoho_Mail_Password with access token, zoid, zuid, new_password
+
+3. Email Operations Flow:
+   - For reading: Get_Emails_Zoho_Format → Mark_Email_Status/Delete_Email
+   - First call Get_Emails_Zoho_Format with email_id, password, status_type, folder to get emails and their IMAP IDs
+   - To mark status: Use Mark_Email_Status with email_id, password, imap_id (from previous step), status_type
+   - To delete emails: Use Delete_Email with email_id, password, imap_id (from previous step), folder
+   - For sending: Use Send_Zoho_Email directly with email_id, password, to_addresses, subject, body
+
+4. Utility Functions:
+   - Generate_Custom_Password: Automatically called by Create_Zoho_Mail_User if password parameter is not provided
+   - encode_time: Call this whenever formatting timestamp data received from any API response
+
+
